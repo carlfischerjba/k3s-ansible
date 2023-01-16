@@ -1,8 +1,22 @@
 ---
-- name: Set SELinux to disabled state
-  selinux:
-    state: disabled
-  when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+# - name: Set SELinux to disabled state
+#   selinux:
+#     state: disabled
+#   when: ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+
+- name: Install SE Linux support for k3s
+  ansible.builtin.yum:
+    name: https://github.com/k3s-io/k3s-selinux/releases/download/v1.2.stable.2/k3s-selinux-1.2-2.el7.noarch.rpm
+    state: present
+  when: ansible_distribution in ['CentOS', 'Scientific'] and ansible_distribution_major_version ==
+        '7'
+
+- name: Install SE Linux support for k3s
+  ansible.builtin.yum:
+    name: https://github.com/k3s-io/k3s-selinux/releases/download/v1.2.stable.2/k3s-selinux-1.2-2.el7.noarch.rpm
+    state: present
+  when: ansible_distribution in ['CentOS', 'Scientific', 'Rocky'] and ansible_distribution_major_version ==
+        '8'
 
 - name: Enable IPv4 forwarding
   sysctl:
